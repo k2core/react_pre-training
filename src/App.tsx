@@ -1,3 +1,4 @@
+import MouseTracker from "./components/MouseTracker";
 import UserProfileCard from "./components/UserProfileCard";
 import type { IUserProfile } from "./types/IUserProfile";
 
@@ -36,6 +37,7 @@ function App() {
       <UserProfileCard user={validUser} />
       <UserProfileCard user={validUserWithPhone} />
       {/* <UserProfileCard user={invalidUser} /> */}
+      <MouseTracker />
     </div>
   );
 }
