@@ -3,6 +3,8 @@ import MouseTracker from "./components/MouseTracker";
 import UserProfileCard from "./components/UserProfileCard";
 import type { IUserProfile } from "./types/IUserProfile";
 import UserProfilePage from "./pages/UserProfilePage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { useAuth } from "./hooks/useAuth";
 
 function App() {
   // ✅ 성공: IUserProfile의 필수 속성을 모두 포함
@@ -34,6 +36,19 @@ function App() {
   };
   */
 
+  // ✅ 로그인(Protected) 실습용: 가상의 페이지들
+  const HomePage = () => <h1>홈 페이지</h1>;
+  const LoginPage = () => {
+    const { login } = useAuth();
+    return (
+      <div>
+        <h1>로그인 페이지</h1>
+        <button onClick={login}>로그인하기 (상태 변경)</button>
+      </div>
+    );
+  };
+  const MyPage = () => <h1>🔐 마이 페이지 (로그인 필요)</h1>;
+
   return (
     <div>
       <UserProfileCard user={validUser} />
@@ -58,6 +73,32 @@ function App() {
               <Route path="/user/:userId" element={<UserProfilePage />} />
             </Routes>
           </div>
+        </BrowserRouter>
+      </div>
+
+      {/* ✅ 로그인(Protected) 실습 영역 */}
+      <div>
+        <BrowserRouter>
+          <nav>
+            <Link to="/">홈</Link> |<Link to="/login"> 로그인</Link> |
+            <Link to="/mypage"> 마이페이지 (Protected)</Link>
+          </nav>
+
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+
+            {/* 👈 핵심: 보호된 경로 설정 */}
+            <Route
+              path="/mypage"
+              element={
+                <ProtectedRoute>
+                  {/* <ProtectedRoute>의 children이 됩니다. */}
+                  <MyPage />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
         </BrowserRouter>
       </div>
     </div>
